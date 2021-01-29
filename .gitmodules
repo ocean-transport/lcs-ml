@@ -1,0 +1,3 @@
+[submodule "pyqg"]
+	path = pyqg
+	url = https://github.com/pyqg/pyqg

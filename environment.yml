@@ -1,19 +1,19 @@
-name: lcs
+name: pyqg_run
 channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=2.7
+  - python
   - matplotlib
-  - numpy>=1.6
+  - numpy
   - xarray 
   - scipy
   - pandas
   - jupyter
   - jupyterlab
-  - pip<19.1
-  - pyfftw>=0.9.2 
-  - Cython>=0.2
+  - pip
+  - pyfftw
+  - Cython
   - pip:
     - pyqg
     
