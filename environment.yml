@@ -7,6 +7,7 @@ dependencies:
   - matplotlib
   - numpy
   - xarray 
+  - cartopy
   - scipy
   - pandas
   - jupyter
@@ -16,4 +17,5 @@ dependencies:
   - Cython
   - pip:
     - pyqg
+    - xmovie
     
