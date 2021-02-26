@@ -1,4 +1,4 @@
-name: pyqg_run
+name: lcs-ml
 channels:
   - defaults
   - conda-forge
@@ -17,5 +17,5 @@ dependencies:
   - Cython
   - pip:
     - pyqg
-    - xmovie
+    - floater
     
