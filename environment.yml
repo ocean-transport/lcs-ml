@@ -3,19 +3,24 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python
-  - matplotlib
-  - numpy
+  # these packages are required if you want your environment to show up in jupyterlab
+  - python=3.8 # has to be <=3.8 for tensorflow to install
+  - ipywidgets
+  # commonly used packages  
   - xarray 
-  - cartopy
+  - numpy
   - scipy
+  - dask
   - pandas
-  - jupyter
-  - jupyterlab
-  - pip
+  - zarr
+  # data visualization
+  - matplotlib
+  - cartopy
+  # project specific packages
   - pyfftw
   - Cython
-  - pip:
-    - pyqg
-    - floater
+  # machine learning packages
+  - tensorflow
+
     
+
