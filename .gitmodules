@@ -1,6 +1,0 @@
-[submodule "pyqg"]
-	path = pyqg
-	url = https://github.com/pyqg/pyqg
-[submodule "floater"]
-	path = floater
-	url = https://github.com/Wendazhang33/floater
