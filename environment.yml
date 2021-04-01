@@ -1,0 +1,14 @@
+name: lcs-ml
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - ipykernel
+  - cython  
+  - numpy
+  - xarray
+  - matplotlib
+
+  - tensorflow-gpu
+  pip:
+    - git+https://github.com/hscannell/floater.git@master
