@@ -20,7 +20,7 @@ tavestart = day
 sig = 1.e-6
 
 def ensemble_generator(initial_PV, n):
-    print(type(n), int(n))
+    
     # configure model
     m = pyqg.QGModel(tmax=tmax, twrite=twrite, tavestart=tavestart)
 
@@ -43,7 +43,9 @@ def ensemble_generator(initial_PV, n):
         datasets.append(model)
 
     ds = xr.concat(datasets, dim='time')
-  
+    ds = ds.expand_dims(dim='ensemble_member')
+    ds['ensemble_member'] = [int(n)]
+    
     # Save model to netCDF
     fn = '/burg/abernathey/users/hillary/QG_proto_EM_'+ str('%03d'%int(n)) +'.nc'
     ds.to_netcdf(fn, engine='h5netcdf', invalid_netcdf=True)
