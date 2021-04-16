@@ -1,0 +1,17 @@
+name: lcs-dev
+channels:
+  - conda-forge
+dependencies:
+  - python==3.7
+  - ipykernel
+  - cython  
+  - numpy
+  - xarray
+  - matplotlib
+
+  pip:
+    - git+https://github.com/hscannell/floater.git@master
+    - git+https://github.com/hscannell/pyqg.git@master
+    - pyfftw
+    - h5netcdf
+    - netcdf
