@@ -1,4 +1,4 @@
-name: lcs_dev_env
+name: lcs-dev
 channels:
   - conda-forge
 dependencies:
@@ -13,3 +13,5 @@ dependencies:
     - git+https://github.com/hscannell/floater.git@master
     - git+https://github.com/hscannell/pyqg.git@master
     - pyfftw
+    - h5netcdf
+    - netcdf

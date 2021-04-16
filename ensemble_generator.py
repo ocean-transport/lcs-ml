@@ -17,9 +17,10 @@ day = 24*60*60.
 tmax = year
 twrite = day
 tavestart = day
-    
+sig = 1.e-6
+
 def ensemble_generator(initial_PV, n):
-    
+    print(type(n), int(n))
     # configure model
     m = pyqg.QGModel(tmax=tmax, twrite=twrite, tavestart=tavestart)
 
@@ -27,7 +28,7 @@ def ensemble_generator(initial_PV, n):
     noise = np.zeros_like(ds_initial.q.values)
 
     # index to the middle of noise and add random perturbation to both levels
-    rg = Generator(MT19937(SeedSequence(n)))
+    rg = Generator(MT19937(int(n))) 
     noise[:,np.floor(len(ds_initial.x)/2).astype('int'), 
           np.floor(len(ds_initial.y)/2).astype('int')] = sig*rg.random((m.q.shape[0]))
 
@@ -44,7 +45,7 @@ def ensemble_generator(initial_PV, n):
     ds = xr.concat(datasets, dim='time')
   
     # Save model to netCDF
-    fn = '/burg/abernathey/users/hillary/QG_proto_EM_'+ str('%03d'%n) +'.nc'
+    fn = '/burg/abernathey/users/hillary/QG_proto_EM_'+ str('%03d'%int(n)) +'.nc'
     ds.to_netcdf(fn, engine='h5netcdf', invalid_netcdf=True)
     
 # generate ensemble
