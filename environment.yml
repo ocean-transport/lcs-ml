@@ -16,3 +16,4 @@ dependencies:
     - pyfftw
     - h5netcdf
     - netcdf
+    - pyyaml

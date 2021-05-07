@@ -3,26 +3,25 @@ import xarray as xr
 import pyqg
 from numpy.random import Generator, MT19937, SeedSequence
 import os
+import yaml
 
 # parameter for randomness
 n = os.getenv('SLURM_ARRAY_TASK_ID')
+pickup_file = os.environ['PICKUP_FILE']
+config_file = os.environ['CONFIG_FILE']
 
 # initial conditions from equilibrium run
-ds_initial = xr.open_dataset('/burg/abernathey/users/hillary/QG_equilibrium_proto.nc')
+ds_initial = xr.open_dataset(pickup_file)
 initial_PV = ds_initial.q.values
 
 # model configuration
-year = 24*60*60*360.
-day = 24*60*60.
-tmax = year
-twrite = day
-tavestart = day
-sig = 1.e-6
+with open(config_file) as file:
+    config = yaml.load(file, Loader=yaml.FullLoader)
 
 def ensemble_generator(initial_PV, n):
     
     # configure model
-    m = pyqg.QGModel(tmax=tmax, twrite=twrite, tavestart=tavestart)
+    m = pyqg.QGModel(tmax=config['tmax'], twrite=config['twrite'], tavestart=config['tavestart'])
 
     # create an empty array filled with zeros 
     noise = np.zeros_like(ds_initial.q.values)
@@ -30,7 +29,7 @@ def ensemble_generator(initial_PV, n):
     # index to the middle of noise and add random perturbation to both levels
     rg = Generator(MT19937(int(n))) 
     noise[:,np.floor(len(ds_initial.x)/2).astype('int'), 
-          np.floor(len(ds_initial.y)/2).astype('int')] = sig*rg.random((m.q.shape[0]))
+          np.floor(len(ds_initial.y)/2).astype('int')] = config['sig']*rg.random((m.q.shape[0]))
 
     # set PV anomaly with randomness
     m.set_q(ds_initial.q.values + noise)
