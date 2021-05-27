@@ -5,20 +5,24 @@ from numpy.random import Generator, MT19937, SeedSequence
 import os
 import yaml
 
-# parameter for randomness
-n = os.getenv('SLURM_ARRAY_TASK_ID')
-pickup_file = os.environ['PICKUP_FILE']
-config_file = os.environ['CONFIG_FILE']
+# ensemble member id & parameter for randomness
+n = os.getenv('SLURM_ARRAY_TASK_ID') 
 
 # initial conditions from equilibrium run
+pickup_file = os.environ['PICKUP_FILE'] 
 ds_initial = xr.open_dataset(pickup_file)
-initial_PV = ds_initial.q.values
 
 # model configuration
+config_file = os.environ['CONFIG_FILE'] 
 with open(config_file) as file:
     config = yaml.load(file, Loader=yaml.FullLoader)
 
-def ensemble_generator(initial_PV, n):
+def ensemble_generator(ds_initial, n):
+    '''Save ensemble member snapshots at each time step'''
+    
+    # make a new directory and switch to it
+    os.mkdir('/burg/abernathey/users/hillary/'+ str('%03d'%int(n)))
+    os.chdir('/burg/abernathey/users/hillary/'+ str('%03d'%int(n)))
     
     # configure model
     m = pyqg.QGModel(tmax=config['tmax'], twrite=config['twrite'], tavestart=config['tavestart'])
@@ -35,19 +39,12 @@ def ensemble_generator(initial_PV, n):
     m.set_q(ds_initial.q.values + noise)
     
     # run with snapshots, save model increments as xarray DataSet
-    datasets = []
     for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
         model = m.to_dataset()
-        model = model.assign(q=(('time','lev','y','x'), m.q.copy()[np.newaxis,...]))
-        datasets.append(model)
+        model = model.expand_dims(dim='n') # ensemble member n
+        model['n'] = [int(n)]
+        fn = '/burg/abernathey/users/hillary/'+ str('%03d'%int(n)) +'/QG_proto_EM_'+ str('%03d_%d'%(int(n),model.time.values[0])) +'.nc'
+        model.to_netcdf(fn, engine='h5netcdf', invalid_netcdf=True, mode='a')
 
-    ds = xr.concat(datasets, dim='time')
-    ds = ds.expand_dims(dim='ensemble_member')
-    ds['ensemble_member'] = [int(n)]
-    
-    # Save model to netCDF
-    fn = '/burg/abernathey/users/hillary/QG_proto_EM_'+ str('%03d'%int(n)) +'.nc'
-    ds.to_netcdf(fn, engine='h5netcdf', invalid_netcdf=True)
-    
 # generate ensemble
-ensemble_generator(initial_PV, n)
+ensemble_generator(ds_initial, n)
