@@ -24,7 +24,7 @@ qi = config['sig']*rg.random((m.q.shape))
 m.set_q(qi) 
 
 # Run with snapshots and save model at each interval as netcdf
-for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
+for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=config['day']*5):
     model = m.to_dataset()
     fn = '/burg/abernathey/users/hillary/spin_up/'+ str('%d'%model.time.values[0]) +'.nc'
     model.to_netcdf(fn, engine='h5netcdf', invalid_netcdf=True, mode='a')
