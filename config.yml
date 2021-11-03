@@ -15,6 +15,6 @@ beta: 0.000000000013
 Ti: 375000
 tmax: 311040000
 twrite: 50000
-tavestart: 311040000
+tavestart: 86400
 ntd: 6
 sig: .000001

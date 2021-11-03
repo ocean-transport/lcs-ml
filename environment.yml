@@ -1,18 +1,21 @@
-name: lcs-dev
+name: lcs-ml
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - python==3.7
+  - pyyaml
   - ipykernel
   - dask
   - cython  
   - numpy
   - xarray
   - matplotlib
-
+  - pyqg
+  - xarray
+  - netcdf4
+  - h5netcdf
+  
   pip:
     - git+https://github.com/hscannell/floater.git@master
-    - pyfftw
-    - h5netcdf
-    - netcdf
-    - pyyaml
+  
