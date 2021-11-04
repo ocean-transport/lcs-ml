@@ -28,7 +28,7 @@ git clone git@github.com:YOUR_GITHUB_USERNAME/lcs-ml.git
 
 3. Connect to the upstream repository and create a new branch
 ```bash
-cd ocetrac
+cd lcs-ml
 git remote add upstream git@github.com:ocean-transport/lcs-ml.git
 ```
 
