@@ -6,11 +6,11 @@ The ocean is an energetic and turbulent environment with motions ranging from sc
 
 Ocean turbulence is dominated by mesoscale motions, which tend to self-organize into coherent vortices on the order of 100s of kilometers in scale. These **Lagrangian Coherent Structures** (LCSs) trap and transport fluids over long distances and potentially play an important role in regulating climate. Mesoscale eddies are notoriously difficult to parametrize in coarse resolution ocean models, making their overall contribution to the climate uncertain. Furthermore, identifying LCSs requires careful calculations of vorticity along Lagrangian particle paths. The goals of this project are to simulate and identify LCSs using the **Lagrangian-Averaged Vorticity Deviation** (LAVD) method. A new labeled dataset of LCSs, PV, and strain fields are produced as a training dataset for machine learning applications. 
 
-## 2. Model Configuration
+## 2. Model Configuration in [`pyqg`](https://pyqg.readthedocs.io/en/latest/)
 
 PyQG ...
 
-## 3. LAVD Identification Method
+## 3. LCS Identification 
 
 Lagrangian-averaged vorticity deviation ...
 
