@@ -10,10 +10,9 @@ Ocean turbulence is dominated by mesoscale motions, which tend to self-organize 
 
 PyQG ...
 
-## 3. LCS Identification 
+## 3. LAVD Identification Method
 
 Lagrangian-averaged vorticity deviation ...
-
 
 
 ## 4. Getting Started
