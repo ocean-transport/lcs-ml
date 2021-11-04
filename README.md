@@ -1,11 +1,12 @@
 ## Identification of Lagrangian Coherent Structures (LCS) and applications for machine learning
 
-### Background
+### Background and Motivation
 
-The ocean is energetic and turbulent environment with motions 
+The ocean is an energetic and turbulent environment with motions ranging from scales of a few centimeters to thousands of kilometers. Interactions across these spatial scales are very important in understanding the dynamics of large-scale circulation, as well as the transport and mixing of tracers (e.g., heat and salinity) throughout the ocean.
+
+Ocean turbulence is dominated by mesoscale motions, which tends to self-organize into coherent vortices on the order of 100s of kilometers wide. These Lagrangian Coherent Structures (LCSs) trap and transport fluids over long distances and potentially play an important role in regulating climate. Mesoscale eddies are notoriously difficult to parametrize in coarse resolution ocean models, making their overall contribution to climate uncertain. Furthermore, identifying LCSs requires careful calculation of vorticity along Lagrangian particle paths.
 
 ### Model configuration
-
 
 
 ### LCS identification method
