@@ -32,9 +32,9 @@ cd lcs-ml
 git remote add upstream git@github.com:ocean-transport/lcs-ml.git
 ```
 
-4. To fix a bug or add a feature, create your own branch of "main"
+4. To fix a bug or add a feature, create your own branch off "main"
 ```bash
-git checkout -b new-branch-name
+git checkout -b new-branch-name main
 ```
 
 5. Set up a conda environment with all the necessary dependencies.
@@ -48,7 +48,7 @@ If you need some help with Git, follow this quick start guide: https://git.wiki.
 
 ### Access the labeled dataset:
 
-The dataset will be available from Zenodo. It includes a XX-member ensemble of year long simulations with daily potential vorticity fields and a mask for identified Lagrangian Coherent Structures. 
+The dataset will be available from Zenodo. It includes an XX-member ensemble of year long simulations with daily potential vorticity and strain fields, as well as a mask for identified LCSs. 
 
 
 ## Project Roadmap
