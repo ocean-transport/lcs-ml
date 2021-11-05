@@ -4,13 +4,27 @@
 
 The ocean is an energetic and turbulent environment with motions ranging from scales of a few centimeters to thousands of kilometers. Interactions across these spatial scales are very important in setting up the large-scale circulation of the ocean, as well as transporting and mixing tracer fields (e.g., heat and salinity).
 
+![Perpetual Ocean](/burg/home/hs3277/lcs-ml/images/perpetual_ocean.gif)
+
 Ocean turbulence is dominated by mesoscale motions, which tend to self-organize into coherent vortices on the order of 100s of kilometers in scale. These **Lagrangian Coherent Structures** (LCSs) trap and transport fluids over long distances and potentially play an important role in regulating climate. Mesoscale eddies are notoriously difficult to parametrize in coarse resolution ocean models, making their overall contribution to the climate uncertain. Furthermore, identifying LCSs requires careful calculations of vorticity along Lagrangian particle paths. The goals of this project are to simulate and identify LCSs using the **Lagrangian-Averaged Vorticity Deviation** (LAVD) method. A new labeled dataset of LCSs, PV, and strain fields are produced as a training dataset for machine learning applications. 
 
 ## 2. Model Configuration in [`pyqg`](https://pyqg.readthedocs.io/en/latest/)
 
-PyQG ...
+We use `pyqg` to simulate a two-layer quasigeostrophic (QG) turbulent system driven by eastward mean shear. We configure the model to mimic the dynamics of the Southern Ocean following the set-up by Zhang et al. [(2020)](https://github.com/ocean-transport/lcs-ml/blob/main/papers/Zhang_etal_2020.pdf). The model is run with a double-periodic domain that is 1200 km on each side and has a horizontal resolution of 512 x 152 grid points. The parameters of the simulation are stored in a [`config.yml`](https://github.com/ocean-transport/lcs-ml/blob/main/config.yml) file. 
+
+The model is spun up from an initial random state, and after some time, coherent vortices begin to self organize. Below are four snapshots of the potential vorticity field evolving during the initial spin up.  
+
+![spin_up_PV](/burg/home/hs3277/lcs-ml/media/spin_up_PV.png)
+
+As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer seems to level off around **XX** years.
+
+![spin_up_EKE](/burg/home/hs3277/lcs-ml/media/spin_up_EKE.png)
+
+The model state at the equilibrated time is saved and used to initialize an ensemble for simulations to detect LCS. These methods are described in the next section. 
 
 ## 3. LCS Identification 
+
+
 
 Lagrangian-averaged vorticity deviation ...
 
@@ -42,8 +56,9 @@ git checkout -b new-branch-name main
 conda env create -f environment.yml
 conda activate lcs-ml
 ```
-
 If you need some help with Git, follow this quick start guide: https://git.wiki.kernel.org/index.php/QuickStart
+
+
 
 
 ### Access the labeled dataset:

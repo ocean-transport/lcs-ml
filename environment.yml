@@ -7,10 +7,15 @@ dependencies:
   - pyyaml
   - ipykernel
   - dask
+  - pandas==1.2.0
+  - scipy==1.3.0
   - cython  
   - numpy
   - xarray
-  - matplotlib
+  - matplotlib==3.4.3
+  - holoviews==1.14.6
+  - bokeh==2.3.2 
+  - datashader
   - pyqg
   - xarray
   - netcdf4
