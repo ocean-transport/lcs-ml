@@ -20,6 +20,7 @@ dependencies:
   - xarray
   - netcdf4
   - h5netcdf
+  - zarr
   
   pip:
     - git+https://github.com/hscannell/floater.git@master
