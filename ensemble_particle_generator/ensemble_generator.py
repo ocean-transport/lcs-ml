@@ -77,7 +77,8 @@ def ensemble_generator(ds_initial, n):
 
         # Only save daily snapshots
         if (m.t % Tsave)==0:
-
+            print(m.t)
+            
             # Vorticity 
             relative_vorticity = m.ifft(-(m.k**2 + m.l**2)*m.ph)[0]
             particle_vorticity = lpa.interpolate_gridded_scalar(lpa.x, lpa.y, relative_vorticity)
@@ -88,7 +89,7 @@ def ensemble_generator(ds_initial, n):
             strain_magnitude = np.sqrt(strain_normal**2 + strain_shear**2)[0]
             particle_strain = lpa.interpolate_gridded_scalar(lpa.x, lpa.y, strain_magnitude)
 
-            n+=1
+            itr+=1
 
             shape = (1, np.int64(m.L/dx), np.int64(m.W/dx))
             ds_particles = xr.Dataset({
