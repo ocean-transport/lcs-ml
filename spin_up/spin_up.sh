@@ -10,9 +10,8 @@
 
 module load anaconda
 source ~/.bashrc
-
 conda activate lcs-ml
-conda isntall pyqg
+
 
 export CONFIG_FILE='/burg/home/hs3277/lcs-ml/config.yml'
 
