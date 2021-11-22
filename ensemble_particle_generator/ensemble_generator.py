@@ -1,6 +1,7 @@
 import numpy as np
 import xarray as xr
 import pyqg
+from pyqg import particles
 from numpy.random import Generator, MT19937, SeedSequence
 import os
 import yaml
@@ -24,7 +25,7 @@ def ensemble_generator(ds_initial, n):
     m = pyqg.QGModel(nx=config['nx'], L=config['L'], dt=config['dt'], tmax=config['tmax'], twrite=config['twrite'], tavestart=config['tavestart'], ntd=config['ntd'], beta=config['beta'], rd=config['Ld'], delta=config['delta'], H1=config['H1'], U1=config['U1'], U2=config['U2'], rek=config['rek']) 
     
     # create an empty array filled with zeros 
-    noise = np.zeros_like(ds_initial.q.values)
+    noise = np.zeros_like(ds_initial.q[0].values)
 
     # index to the middle of noise and add random perturbation to both levels
     rg = Generator(MT19937(int(n))) 
@@ -32,7 +33,7 @@ def ensemble_generator(ds_initial, n):
           np.floor(len(ds_initial.y)/2).astype('int')] = config['sig']*rg.random((m.q.shape[0]))
 
     # set PV anomaly with randomness
-    m.set_q(ds_initial.q.values + noise)
+    m.set_q(ds_initial.q[0].values + noise)
     
     # Set up Lagrangian particles and advect using gridded u and v
     dx = m.dx/2   # or 4

@@ -10,7 +10,9 @@
  
 echo "$SLURM_ARRAY_TASK_ID"
 
-module load anaconda
+module load anaconda/3-2021.05
+conda init bash
+
 source ~/.bashrc
 conda activate lcs-ml
 
