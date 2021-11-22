@@ -12,9 +12,9 @@ echo "$SLURM_ARRAY_TASK_ID"
 
 module load anaconda
 source ~/.bashrc
-conda activate lcs-dev
+conda activate lcs-ml
 
-export PICKUP_FILE='/burg/abernathey/users/hillary/QG_equilibrium_proto.nc'
+export PICKUP_FILE='/burg/abernathey/users/hillary/pyqg_spin_up/84672000.nc'
 export CONFIG_FILE='/burg/home/hs3277/lcs-ml/config.yml'
 
-python ensemble_generator.py $SLURM_ARRAY_TASK_ID $PICKUP_FILE $CONFIG_FILE
+python3 ensemble_generator.py $SLURM_ARRAY_TASK_ID $PICKUP_FILE $CONFIG_FILE
