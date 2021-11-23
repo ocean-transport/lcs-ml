@@ -17,7 +17,7 @@ We use `pyqg` to simulate a two-layer quasigeostrophic (QG) turbulent system dri
 The model is spun up from an initial random state, and after some time, coherent vortices begin to self organize. Below are four snapshots of the upper layer potential vorticity anomaly evolving during the begining of the initial spin up.  
 
 <p align="center">
-  <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up.gif">
+  <img width=40% height=40% src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up.gif">
 </p>
 
 <p align="center">
@@ -39,13 +39,23 @@ The equilibrated model state is saved and used to initialize the large ensemble 
 
 The Large Ensemble is initialized with the PV anomaly field from the equilibrated state using the same model configuration. Each ensemble member differs slightly by perturbing the PV anomaly at a single grid cell near the middle of the domain. This randomness is enough for the members to diverge and is generated using a unique seed number. This ensures that the ensemble member perturbations are completely reproducible. 
 
-A total of 1,048,576 lagrangian particles are seeded every half grid point and advanced using the gridded velocity field. Relative vorticity (eq. 1) and strain magnitude (eq. 1) are caclulated for each particle. 
+A total of 1,048,576 lagrangian particles are seeded every half grid point and advanced using the gridded velocity field. In addition to the X and Y position, two scalar quantities are computed along particle paths. They are relative vorticity, 
 
+![eq](https://latex.codecogs.com/svg.latex?\Large&space;\zeta=\nabla^{2}\psi) ,
 
-Test equation
+and strain magnitude,
+ 
+![eq](https://latex.codecogs.com/svg.latex?\Large&space;\sigma=\sqrt{\sigma_n^2+\sigma_s^2}) ,
 
-![eq1](https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}) 
+where ![eq1](https://latex.codecogs.com/svg.latex?\Large&space;\sigma_n) and ![eq1](https://latex.codecogs.com/svg.latex?\Large&space;\sigma_s) are the normal and shear strain respectively, such that
 
+![eq](https://latex.codecogs.com/svg.latex?\Large&space;\sigma_n=-2\frac{\partial^2}{\partial_x\partial_y}\psi) 
+
+and 
+
+![eq](https://latex.codecogs.com/svg.latex?\Large&space;\sigma_s=\frac{\partial^2\psi}{\partial_x^2}-\frac{\partial^2\psi}{\partial_y^2}).
+
+We solve the above equations in spectral space before using the inverse FFT to transform back to the time domain. Spectral computations are faster and computationally more efficient. 
 
 
 
