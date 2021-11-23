@@ -24,7 +24,7 @@ The model is spun up from an initial random state, and after some time, coherent
   <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_PV.png">
 </p>
 
-The model is spun up for a total of 10 years and saved at pentad (5-day) intervals. 
+The model is spun up for a total of 15 years and saved at pentad (5-day) intervals. 
 
 As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer levels off around **XX** years.
 
@@ -35,7 +35,7 @@ As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it
 The equilibrated model state is saved and used to initialize the large ensemble of `pyqg` simulations.
 
 
-## 3. `pyqg` Large Ensemble
+## 3. Large Ensemble
 
 The Large Ensemble is initialized with the PV anomaly field from the equilibrated state using the same model configuration. Each ensemble member differs slightly by perturbing the PV anomaly at a single grid cell near the middle of the domain. This randomness is enough for the members to diverge and is generated using a unique seed number. This ensures that the ensemble member perturbations are completely reproducible. 
 
