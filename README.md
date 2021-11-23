@@ -4,33 +4,44 @@
 
 The ocean is an energetic and turbulent environment with motions ranging from scales of a few centimeters to thousands of kilometers. Interactions across these spatial scales are very important in setting up the large-scale circulation of the ocean, as well as transporting and mixing tracer fields (e.g., heat and salinity).
 
-<p align="center">
-  <img src="/media/perpetual_ocean.gif" alt="perpetual_ocean" />
-</p>
+![Perpetual Ocean](/burg/home/hs3277/lcs-ml/images/perpetual_ocean.gif)
 
 Ocean turbulence is dominated by mesoscale motions, which tend to self-organize into coherent vortices on the order of 100s of kilometers in scale. These **Lagrangian Coherent Structures** (LCSs) trap and transport fluids over long distances and potentially play an important role in regulating climate. Mesoscale eddies are notoriously difficult to parametrize in coarse resolution ocean models, making their overall contribution to the climate uncertain. Furthermore, identifying LCSs requires careful calculations of vorticity along Lagrangian particle paths. The goals of this project are to simulate and identify LCSs using the **Lagrangian-Averaged Vorticity Deviation** (LAVD) method. A new labeled dataset of LCSs, PV, and strain fields are produced as a training dataset for machine learning applications. 
 
-## 2. Model Configuration in [`pyqg`](https://pyqg.readthedocs.io/en/latest/)
+## 2. Model Initialization 
 
-We use `pyqg` to simulate a two-layer quasigeostrophic (QG) turbulent system driven by eastward mean shear. We configure the model to mimic the dynamics of the Southern Ocean following the set-up by Zhang et al. [(2020)](https://github.com/ocean-transport/lcs-ml/blob/main/papers/Zhang_etal_2020.pdf). The model is run with a double-periodic domain that is 1200 km on each side and has a horizontal resolution of 512 x 152 grid points. The parameters of the simulation are stored in a [`config.yml`](https://github.com/ocean-transport/lcs-ml/blob/main/config.yml) file. 
+We use `pyqg` to simulate a two-layer quasigeostrophic (QG) turbulent system driven by eastward mean shear. We configure the model to mimic the dynamics of the Southern Ocean following the set-up by Zhang et al. [(2020)](https://github.com/ocean-transport/lcs-ml/blob/main/papers/Zhang_etal_2020.pdf). The model is run with a double-periodic domain that is 1200 km on each side and has a horizontal resolution of 512 x 512 grid points. The parameters of the simulation are stored in a [`config.yml`](https://github.com/ocean-transport/lcs-ml/blob/main/config.yml) file. 
 
-The model is spun up from an initial random state, and after some time, coherent vortices begin to self organize. Below are four snapshots of the potential vorticity field evolving during the initial spin up.  
+The model is spun up from an initial random state, and after some time, coherent vortices begin to self organize. Below are four snapshots of the upper layer potential vorticity anomaly evolving during the begining of the initial spin up.  
 
-<p align="center">
-  <img src="/media/spin_up_PV.png" alt="spin_up_PV" />
-</p>
+![sping_up_mov](/burg/home/hs3277/lcs-ml/images/spin_up.mov)
+
+![spin_up_PV](/burg/home/hs3277/lcs-ml/media/spin_up_PV.png)
+
+The model is spun up for a total of 10 years and saved at pentad (5-day) intervals. 
+
+As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer levels off around **XX** years.
+
+![spin_up_EKE](/burg/home/hs3277/lcs-ml/media/spin_up_EKE.png)
+
+The equilibrated model state is saved and used to initialize the large ensemble of `pyqg` simulations.
 
 
-As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer seems to level off around **XX** years.
+## 3. `pyqg` Large Ensemble
 
-<p align="center">
-  <img src="/media/spin_up_EKE.png" alt="spin_up_EKE" />
-</p>
+The Large Ensemble is initialized with the PV anomaly field from the equilibrated state using the same model configuration. Each ensemble member differs slightly by perturbing the PV anomaly at a single grid cell near the middle of the domain. This randomness is enough for the members to diverge and is generated using a unique seed number. This ensures that the ensemble member perturbations are completely reproducible. 
 
-The model state at the equilibrated time is saved and used to initialize an ensemble for simulations to detect LCS. These methods are described in the next section. 
+A total of 1,048,576 lagrangian particles are seeded every half grid point and advanced using the gridded velocity field. Relative vorticity (eq. 1) and strain magnitude (eq. 1) are caclulated for each particle. 
 
-## 3. LCS Identification 
 
+Test equation
+
+![eq1](https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}) 
+
+
+
+
+## 4. LCS Identification 
 
 
 Lagrangian-averaged vorticity deviation ...
