@@ -4,7 +4,7 @@
 
 The ocean is an energetic and turbulent environment with motions ranging from scales of a few centimeters to thousands of kilometers. Interactions across these spatial scales are very important in setting up the large-scale circulation of the ocean, as well as transporting and mixing tracer fields (e.g., heat and salinity).
 
-![Perpetual Ocean](/burg/home/hs3277/lcs-ml/images/perpetual_ocean.gif)
+![Perpetual Ocean](https://github.com/ocean-transport/lcs-ml/blob/main/media/perpetual_ocean.gif)
 
 Ocean turbulence is dominated by mesoscale motions, which tend to self-organize into coherent vortices on the order of 100s of kilometers in scale. These **Lagrangian Coherent Structures** (LCSs) trap and transport fluids over long distances and potentially play an important role in regulating climate. Mesoscale eddies are notoriously difficult to parametrize in coarse resolution ocean models, making their overall contribution to the climate uncertain. Furthermore, identifying LCSs requires careful calculations of vorticity along Lagrangian particle paths. The goals of this project are to simulate and identify LCSs using the **Lagrangian-Averaged Vorticity Deviation** (LAVD) method. A new labeled dataset of LCSs, PV, and strain fields are produced as a training dataset for machine learning applications. 
 
@@ -14,15 +14,15 @@ We use `pyqg` to simulate a two-layer quasigeostrophic (QG) turbulent system dri
 
 The model is spun up from an initial random state, and after some time, coherent vortices begin to self organize. Below are four snapshots of the upper layer potential vorticity anomaly evolving during the begining of the initial spin up.  
 
-![sping_up_mov](/burg/home/hs3277/lcs-ml/images/spin_up.mov)
+![sping_up_mov](/https://github.com/ocean-transport/lcs-ml/blob/main/spin_up.mov)
 
-![spin_up_PV](/burg/home/hs3277/lcs-ml/media/spin_up_PV.png)
+![spin_up_PV](https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_PV.png)
 
 The model is spun up for a total of 10 years and saved at pentad (5-day) intervals. 
 
 As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer levels off around **XX** years.
 
-![spin_up_EKE](/burg/home/hs3277/lcs-ml/media/spin_up_EKE.png)
+![spin_up_EKE](https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_EKE.png)
 
 The equilibrated model state is saved and used to initialize the large ensemble of `pyqg` simulations.
 
