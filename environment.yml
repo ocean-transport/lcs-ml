@@ -16,7 +16,6 @@ dependencies:
   - holoviews==1.14.6
   - bokeh==2.3.2 
   - datashader
-  - pyqg
   - xarray
   - netcdf4
   - h5netcdf
@@ -24,4 +23,5 @@ dependencies:
   
   pip:
     - git+https://github.com/hscannell/floater.git@master
+    - git+https://github.com/pyqg/pyqg.git@master
   
