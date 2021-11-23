@@ -15,23 +15,30 @@ with open(config_file) as file:
     
 # Initialize QG Model
 m = pyqg.QGModel(nx=config['nx'], L=config['L'], dt=config['dt'], tmax=config['tmax'], twrite=config['twrite'],
-                 tavestart=config['tavestart'], ntd=config['ntd'], beta=config['beta'], rd=config['Ld'], delta=config['delta'],
-                 H1=config['H1'], U1=config['U1'], U2=config['U2'], rek=config['rek']) 
+                 tavestart=config['tavestart'], taveint=config['taveint'], ntd=config['ntd'], beta=config['beta'],
+                 rd=config['Ld'], delta=config['delta'], H1=config['H1'], U1=config['U1'], U2=config['U2'], rek=config['rek']) 
+
+# taveint: Time interval for accumulation of diagnostic averages. (units: model time)
+# tsnapint: Time interval for snapshots (units: model time)
+# tsnapstart: Start time for snapshot writeout (units: model time)
 
 # Set upper and lower layer PV anomalies (in spatial coordinates)
 rg = Generator(MT19937(int(1)))
 qi = config['sig']*rg.random((m.q.shape))
 m.set_q(qi) 
 
-# Run with snapshots and save model at each interval as netcdf
-for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=config['day']):
+Tsave = config['day']*5
+fn = '/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr' 
+
+# Run with snapshots and save model at pentad model time increments
+for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
     
-    model = m.to_dataset()
-    
-    # Save model to Zarr
-    fn = '/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr' 
-    model = model.chunk() #this uses a global chunk
-    if m.t == config['day']:
-        model.to_zarr(fn, mode='w-', consolidated=True)
-    else:
-        model.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
+    # Only save daily snapshots
+        if (m.t % Tsave)==0:
+            model = m.to_dataset()
+            model = model.chunk() #this uses a global chunk
+            
+            if m.t == Tsave:
+                model.to_zarr(fn, mode='w-', consolidated=True)
+            else:
+                model.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
