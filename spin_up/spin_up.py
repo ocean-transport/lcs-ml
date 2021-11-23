@@ -25,6 +25,13 @@ m.set_q(qi)
 
 # Run with snapshots and save model at each interval as netcdf
 for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=config['day']):
+    
     model = m.to_dataset()
-    fn = '/burg/abernathey/users/hillary/spin_up/'+ str('%d'%model.time.values[0]) +'.nc'
-    model.to_netcdf(fn, engine='h5netcdf', invalid_netcdf=True, mode='a')
+    
+    # Save model to Zarr
+    fn = '/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr' 
+    model = model.chunk() #this uses a global chunk
+    if m.t == config['day']:
+        model.to_zarr(fn, mode='w-', consolidated=True)
+    else:
+        model.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
