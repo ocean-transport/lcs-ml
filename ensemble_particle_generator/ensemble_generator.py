@@ -94,32 +94,31 @@ def ensemble_generator(ds_initial, n):
 
             shape = (1, np.int64(m.L/dx), np.int64(m.W/dx))
             ds_particles = xr.Dataset({
-                'x': (('time', 'y0', 'x0'), np.reshape(lpa.x.copy(), shape),{'long_name': 'particle position in the x direction', 'units': 'grid point'}),
-                'y': (('time', 'y0', 'x0'), np.reshape(lpa.y.copy(), shape),{'long_name': 'particle position in the y direction', 'units': 'grid point'}),
+                'x': (('time', 'y0', 'x0'), np.reshape(lpa.x.copy(), shape),{'long_name': 'particle position in the x direction', 'units': 'meters'}),
+                'y': (('time', 'y0', 'x0'), np.reshape(lpa.y.copy(), shape),{'long_name': 'particle position in the y direction', 'units': 'meters'}),
                 'vort': (('time', 'y0', 'x0'), np.reshape(particle_vorticity, shape),{'long_name': 'particle relative vorticity', 'units': 'second -1'}),
-                'strain': (('time', 'y0', 'x0'), np.reshape(particle_strain, shape),{'long_name': 'particle strain magnitude', 'units': 'unitless'}),
+                'strain': (('time', 'y0', 'x0'), np.reshape(particle_strain, shape),{'long_name': 'particle strain magnitude', 'units': 'second -1'}),
             },
                 coords = {
-                    'x0': (('x0'), np.reshape(x0, shape[1:])[0,:],{'long_name': 'real space grid points in the x direction', 'units': 'grid point'}),
-                    'y0': (('y0'), np.reshape(y0, shape[1:])[:,0],{'long_name': 'real space grid points in the y direction', 'units': 'grid point'}),
-                    'time': (('time'), np.array([m.t]),{'long_name': 'model time', 'units': 'seconds',})
+                    'x0': (('x0'), np.reshape(x0, shape[1:])[0,:],{'long_name': 'real space grid points in the x direction', 'units': 'meters'}),
+                    'y0': (('y0'), np.reshape(y0, shape[1:])[:,0],{'long_name': 'real space grid points in the y direction', 'units': 'meters'}),
+                    'time': (('time'), [np.timedelta64(int(m.t),'s').astype('timedelta64[D]')],{'long_name': 'model time'})
                 },
                 attrs = ds_initial.attrs,
             )
             
             ds_particles = ds_particles.expand_dims(dim='n') # ensemble member
             ds_particles['n'] = [int(n)]
-            ds_particles['n'].attrs = {'long_name': 'ensemble member', 'units': 'none',}
-    
+            ds_particles['n'].attrs = {'long_name': 'ensemble member'}
             
             # Save as Zarr
             fn = '/burg/abernathey/users/hillary/lcs/pyqg_ensemble/'+'%03d'%int(n)+'.zarr' 
             ds_particles = ds_particles.chunk() #this uses a global chunk
             if m.t == Tsave:
-                ds_particles.to_zarr(fn, mode='a', consolidated=True)
+                ds_particles.to_zarr(fn, mode='w', consolidated=True)
             else:
                 ds_particles.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
-        if m.t==Tsave*90:
+        if (m.t % (Tsave*90))==0: # break loop after 90 days
                 break
                 
 

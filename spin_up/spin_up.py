@@ -33,12 +33,15 @@ fn = '/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr'
 # Run with snapshots and save model at pentad model time increments
 for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
     
-    # Only save daily snapshots
-        if (m.t % Tsave)==0:
-            model = m.to_dataset()
-            model = model.chunk() #this uses a global chunk
-            
-            if m.t == Tsave:
-                model.to_zarr(fn, mode='w-', consolidated=True)
-            else:
-                model.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
+    # Only save pentad snapshots
+    if (m.t % Tsave)==0:
+        model = m.to_dataset()
+        model = model.chunk() #this uses a global chunk
+
+        if m.t == Tsave:
+            model.to_zarr(fn, mode='w-', consolidated=True)
+        else:
+            model.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
+
+    if (m.t % (config['day'] * 365 * 15))==0: # Stop loop after 15 years
+        break
