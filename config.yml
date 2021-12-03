@@ -17,5 +17,5 @@ tmax: 466560000
 twrite: 50000
 tavestart: 86400
 taveint: 86400
-ntd: 6
+ntd: 1
 sig: .000001
