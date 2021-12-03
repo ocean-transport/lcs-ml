@@ -36,7 +36,7 @@ def ensemble_generator(ds_initial, n):
     m.set_q(ds_initial.q[0].values + noise)
     
     # Set up Lagrangian particles and advect using gridded u and v
-    dx = m.dx/2   # or 4
+    dx = m.dx/2   
     dy = m.dy/2
 
     x0,y0 = np.meshgrid(np.arange(0,m.L,dx)+dx/2,
@@ -80,11 +80,14 @@ def ensemble_generator(ds_initial, n):
         if (m.t % Tsave)==0:
             print(m.t)
             
-            # Vorticity 
+            # Eulerian Stream Function
+            p = m.ifft(m.ph)  
+            
+            # Particle Potential Vorticity 
             relative_vorticity = m.ifft(-(m.k**2 + m.l**2)*m.ph)[0]
             particle_vorticity = lpa.interpolate_gridded_scalar(lpa.x, lpa.y, relative_vorticity)
 
-            # Strain 
+            # Particle Strain 
             strain_normal = m.ifft(2 * m.k * m.l * m.ph)
             strain_shear = m.ifft((-m.k**2 + m.l**2)*m.ph)
             strain_magnitude = np.sqrt(strain_normal**2 + strain_shear**2)[0]
@@ -94,15 +97,28 @@ def ensemble_generator(ds_initial, n):
 
             shape = (1, np.int64(m.L/dx), np.int64(m.W/dx))
             ds_particles = xr.Dataset({
-                'x': (('time', 'y0', 'x0'), np.reshape(lpa.x.copy(), shape),{'long_name': 'particle position in the x direction', 'units': 'meters'}),
-                'y': (('time', 'y0', 'x0'), np.reshape(lpa.y.copy(), shape),{'long_name': 'particle position in the y direction', 'units': 'meters'}),
-                'vort': (('time', 'y0', 'x0'), np.reshape(particle_vorticity, shape),{'long_name': 'particle relative vorticity', 'units': 'second -1'}),
-                'strain': (('time', 'y0', 'x0'), np.reshape(particle_strain, shape),{'long_name': 'particle strain magnitude', 'units': 'second -1'}),
+                'xpos': (('time', 'y0', 'x0'), np.reshape(lpa.x.copy(), shape),
+                         {'long_name': 'particle position in the x direction', 'units': 'meters'}),
+                'ypos': (('time', 'y0', 'x0'), np.reshape(lpa.y.copy(), shape),
+                         {'long_name': 'particle position in the y direction', 'units': 'meters'}),
+                'vort': (('time', 'y0', 'x0'), np.reshape(particle_vorticity, shape),
+                         {'long_name': 'particle relative vorticity', 'units': 'second ^-1'}),
+                'strain': (('time', 'y0', 'x0'), np.reshape(particle_strain, shape),
+                           {'long_name': 'particle strain magnitude', 'units': 'second ^-1'}),
+                'p': (('time', 'y', 'x'), np.reshape(p[0], (1, config['nx'], config['nx'])),
+                      {'long_name': 'streamfunction in real space', 'units': 'meters squared second ^-1',}),
             },
                 coords = {
-                    'x0': (('x0'), np.reshape(x0, shape[1:])[0,:],{'long_name': 'real space grid points in the x direction', 'units': 'meters'}),
-                    'y0': (('y0'), np.reshape(y0, shape[1:])[:,0],{'long_name': 'real space grid points in the y direction', 'units': 'meters'}),
-                    'time': (('time'), [np.timedelta64(int(m.t),'s').astype('timedelta64[D]')],{'long_name': 'model time'})
+                    'x': (('x'), m.x[0,:],
+                          {'long_name': 'model grid points in the x direction', 'units': 'meters'}),
+                    'y': (('y'), m.y[:,0],
+                          {'long_name': 'model grid points in the y direction', 'units': 'meters'}),
+                    'x0': (('x0'), np.reshape(x0, shape[1:])[0,:],
+                           {'long_name': 'particle grid points in the x direction', 'units': 'meters'}),
+                    'y0': (('y0'), np.reshape(y0, shape[1:])[:,0],
+                           {'long_name': 'particle grid points in the y direction', 'units': 'meters'}),
+                    'time': (('time'), [np.timedelta64(int(m.t),'s').astype('timedelta64[D]')],
+                             {'long_name': 'model time'})
                 },
                 attrs = ds_initial.attrs,
             )
@@ -118,7 +134,8 @@ def ensemble_generator(ds_initial, n):
                 ds_particles.to_zarr(fn, mode='w', consolidated=True)
             else:
                 ds_particles.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
-        if (m.t % (Tsave*90))==0: # break loop after 90 days
+        
+        if (m.t % (Tsave*91))==0: # break loop after 90 days
                 break
                 
 
