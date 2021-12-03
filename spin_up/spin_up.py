@@ -27,13 +27,12 @@ rg = Generator(MT19937(int(1)))
 qi = config['sig']*rg.random((m.q.shape))
 m.set_q(qi) 
 
-Tsave = config['day']*5
+Tsave = config['day']*20
 fn = '/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr' 
 
-# Run with snapshots and save model at pentad model time increments
+# Run with snapshots and save model every 20 days
 for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
     
-    # Only save pentad snapshots
     if (m.t % Tsave)==0:
         model = m.to_dataset()
         model = model.chunk() #this uses a global chunk
@@ -43,5 +42,5 @@ for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
         else:
             model.to_zarr(fn, mode='a', append_dim='time', consolidated=True)
 
-    if (m.t % (config['day'] * 365 * 15))==0: # Stop loop after 15 years
+    if (m.t % (config['day'] * 365 * 51))==0: # Stop loop after 50 years
         break
