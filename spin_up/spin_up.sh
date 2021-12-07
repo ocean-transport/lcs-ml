@@ -14,5 +14,6 @@ source ~/.bashrc
 conda activate lcs-ml
 
 export CONFIG_FILE='/burg/home/hs3277/lcs-ml/config.yml'
+export OUT_FILE='/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr'
 
-python spin_up.py $CONFIG_FILE
+python spin_up.py $CONFIG_FILE $OUT_FILE
