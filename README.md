@@ -24,7 +24,7 @@ The model is spun up from an initial random state, and after some time, coherent
   <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_PV.png">
 </p>
 
-The model is spun up for a total of 15 years and saved at pentad (5-day) intervals. 
+The model is spun up for 50 years and saved at monthly (30-day) intervals. 
 
 As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer levels off around **XX** years.
 
