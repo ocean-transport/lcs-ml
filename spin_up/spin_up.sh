@@ -5,7 +5,7 @@
 #SBATCH --account=abernathey     # group account name
 #SBATCH --job-name=spin_up       # job name
 #SBATCH -c 1                     # number of cpu cores to use (up to 32 cores per server)
-#SBATCH --time=0-12:00           # time the job will take to run in D-HH:MM
+#SBATCH --time=1-06:00           # time the job will take to run in D-HH:MM
 #SBATCH --mem-per-cpu=20G        # The memory the job will use per cpu core
 
 module load anaconda/3-2021.05
