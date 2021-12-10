@@ -24,22 +24,26 @@ The model is spun up from an initial random state, and after some time, coherent
   <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_PV.png">
 </p>
 
-The model is spun up for 50 years and saved at monthly (30-day) intervals. 
+The model is spun up for 50 years and saved at monthly (30-day) intervals. There are no leap years, so each year has 365 days. 
 
-As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer levels off around **XX** years.
+As the model gets spun up, the mean eddy kinetic energy (EKE) increases until it reaches an equilibrated state. When the EKE plateaus the model is considered to be in a stable state. The time series of EKE in each layer levels off around 50 years.
 
 <p align="center">
-  <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_EKE.png">
+  <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_EKE_semilog.png">
 </p>
 
-The equilibrated model state is saved and used to initialize the large ensemble of `pyqg` simulations.
+<p align="center">
+  <img src="https://github.com/ocean-transport/lcs-ml/blob/main/media/spin_up_EKE_central_diff.png">
+</p>
+
+The equilibrated model state is saved at year 50 and used to initialize the large ensemble of lagrangian particles.
 
 
 ## 3. Large Ensemble
 
-The Large Ensemble is initialized with the PV anomaly field from the equilibrated state using the same model configuration. Each ensemble member differs slightly by perturbing the PV anomaly at a single grid cell near the middle of the domain. This randomness is enough for the members to diverge and is generated using a unique seed number. This ensures that the ensemble member perturbations are completely reproducible. 
+The Large Ensemble is initialized with the year 50 PV anomaly field from the equilibrated state using the same model configuration. Each ensemble member differs slightly by perturbing the PV anomaly at a single grid cell near the middle of the domain. This randomness is enough for the members to diverge. The perturbation for each ensemble member is dictated by a unique seed number. This ensures that the ensemble members are completely reproducible. 
 
-A total of 1,048,576 lagrangian particles are seeded every half grid point and advanced using the gridded velocity field. In addition to the X and Y position, two scalar quantities are computed along particle paths. They are relative vorticity, 
+A total of 1,048,576 lagrangian particles are seeded every half grid point and advanced using the gridded u and v velocity fields. In addition to the X and Y position, two scalar quantities are computed along particle paths. They are relative vorticity, 
 
 ![eq](https://latex.codecogs.com/svg.latex?\Large&space;\zeta=\nabla^{2}\psi) ,
 
@@ -57,12 +61,7 @@ and
 
 We solve the above equations in spectral space before using the inverse FFT to transform back to the time domain. Spectral computations are faster and computationally more efficient. 
 
-
-
-## 4. LCS Identification 
-
-
-Lagrangian-averaged vorticity deviation ...
+The stream function is also saved for the model domain at each time integration. 
 
 
 ## 4. Getting Started
@@ -92,16 +91,30 @@ git checkout -b new-branch-name main
 conda env create -f environment.yml
 conda activate lcs-ml
 ```
-If you need some help with Git, follow this quick start guide: https://git.wiki.kernel.org/index.php/QuickStart
+If you need some help with Git, follow this [quick start guide](https://git.wiki.kernel.org/index.php/QuickStart).
 
+6. To rerun the control simulation, submit the [batch script](https://github.com/ocean-transport/lcs-ml/blob/main/spin_up/spin_up.sh) via slurm. You will need to modifuly the config and output file directories accordingly. 
+```bash
+sbatch spin_up.sh
+```
 
+7. To generate the ensemble, submit this [batch script](https://github.com/ocean-transport/lcs-ml/blob/main/ensemble_particle_generator/ensemble_generator.sh) using `job-array`, again modifying file paths to match your directory. In this example, we are generature 40,000 ensemble members. 
+```bash
+sbatch --array=1-40000 ensemble_generator.sh
+```
 
+To check the progress of sbatch jobs, you can either check the auto-generated `slurm-******.out` file or type
+```bash
+squeue -u [$USER_NAME]
+```
 
 ### Access the labeled dataset:
 
-The dataset will be available from Zenodo. It includes an XX-member ensemble of year long simulations with daily potential vorticity and strain fields, as well as a mask for identified LCSs. 
+The dataset will be available from Zenodo. It includes the XX-member ensemble of 90-day simulations with daily particle position, vorticity, strain, and background streamfunction.
+
+This ensemble will also become available on the cloud via Pangeo-forge. More details will be provided soon. 
 
 
-## Project Roadmap
+## Origonal Project Roadmap
 
 ![image](https://user-images.githubusercontent.com/1197350/111811323-4f888980-88ad-11eb-85d4-aae9a3dd4d84.png)
