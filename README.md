@@ -110,13 +110,13 @@ squeue -u [$USER_NAME]
 
 ### Access the labeled dataset:
 
-Each ensemble member is saved as a unique zarr store on Ginsburg and can be accessed here: `/burg/abernathey/users/hillary/lcs/pyqg_ensemble/####.zarr`
-The entire 50 year spin is saved as a zarr store and can be accessed here: `/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr`
-The 50 year snapshot is stored as netCDF and can be accessed here: `/burg/abernathey/users/hillary/lcs/spin_up/QG_steady_50.nc`
+**On Ginsburg**
+- Each 90-day ensemble member: `/burg/abernathey/users/hillary/lcs/pyqg_ensemble/####.zarr`
+- Entire 50-year spin up: `/burg/abernathey/users/hillary/lcs/spin_up/spin_up.zarr`
+- 50-year snapshot: `/burg/abernathey/users/hillary/lcs/spin_up/QG_steady_50.nc`
 
-The dataset will be available from Zenodo. It includes the XX-member ensemble of 90-day simulations with daily particle position, vorticity, strain, and background streamfunction.
-
-This ensemble will also become available on the cloud via Pangeo-forge. More details will be provided soon. 
+**On the Cloud**
+This ensemble will also be available soon on the cloud via Pangeo-forge. More details will be provided here soon. 
 
 # Load data from Ginsburg
 
