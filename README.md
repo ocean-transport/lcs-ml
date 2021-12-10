@@ -98,7 +98,7 @@ If you need some help with Git, follow this [quick start guide](https://git.wiki
 sbatch spin_up.sh
 ```
 
-7. To generate the ensemble, submit this [batch script](https://github.com/ocean-transport/lcs-ml/blob/main/ensemble_particle_generator/ensemble_generator.sh) using `job-array`, again modifying file paths to match your directory. In this example, we are generature 40,000 ensemble members. 
+7. To generate the ensemble, submit this [batch script](https://github.com/ocean-transport/lcs-ml/blob/main/ensemble_particle_generator/ensemble_generator.sh) using [job array](https://slurm.schedmd.com/job_array.html), again modifying file paths to match your directory. In this example, we are generature 40,000 ensemble members. 
 ```bash
 sbatch --array=1-40000 ensemble_generator.sh
 ```
