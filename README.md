@@ -116,7 +116,7 @@ squeue -u [$USER_NAME]
 - 50-year snapshot: `/burg/abernathey/users/hillary/lcs/spin_up/QG_steady_50.nc`
 
 **On the Cloud**
-This ensemble will also be available soon on the cloud via Pangeo-forge. More details will be provided here soon. 
+- This ensemble will also be available soon on the cloud via Pangeo-forge. More details will be provided here soon. 
 
 # Load data from Ginsburg
 
