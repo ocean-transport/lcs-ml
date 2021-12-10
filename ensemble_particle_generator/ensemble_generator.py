@@ -98,25 +98,25 @@ def ensemble_generator(ds_initial, n):
             shape = (1, np.int64(m.L/dx), np.int64(m.W/dx))
             ds_particles = xr.Dataset({
                 'xpos': (('time', 'y0', 'x0'), np.reshape(lpa.x.copy(), shape),
-                         {'long_name': 'particle position in the x direction', 'units': 'meters'}),
+                         {'long_name': 'particle position in the x direction', 'units': 'm'}),
                 'ypos': (('time', 'y0', 'x0'), np.reshape(lpa.y.copy(), shape),
-                         {'long_name': 'particle position in the y direction', 'units': 'meters'}),
+                         {'long_name': 'particle position in the y direction', 'units': 'm'}),
                 'vort': (('time', 'y0', 'x0'), np.reshape(particle_vorticity, shape),
-                         {'long_name': 'particle relative vorticity', 'units': 'second ^-1'}),
+                         {'long_name': 'particle relative vorticity', 'units': 's^-1'}),
                 'strain': (('time', 'y0', 'x0'), np.reshape(particle_strain, shape),
-                           {'long_name': 'particle strain magnitude', 'units': 'second ^-1'}),
+                           {'long_name': 'particle strain magnitude', 'units': 's^-1'}),
                 'p': (('time', 'y', 'x'), np.reshape(p[0], (1, config['nx'], config['nx'])),
-                      {'long_name': 'streamfunction in real space', 'units': 'meters squared second ^-1',}),
+                      {'long_name': 'streamfunction in real space', 'units': 'm^2 s^-1',}),
             },
                 coords = {
                     'x': (('x'), m.x[0,:],
-                          {'long_name': 'model grid points in the x direction', 'units': 'meters'}),
+                          {'long_name': 'model grid points in the x direction', 'units': 'm'}),
                     'y': (('y'), m.y[:,0],
-                          {'long_name': 'model grid points in the y direction', 'units': 'meters'}),
+                          {'long_name': 'model grid points in the y direction', 'units': 'm'}),
                     'x0': (('x0'), np.reshape(x0, shape[1:])[0,:],
-                           {'long_name': 'particle grid points in the x direction', 'units': 'meters'}),
+                           {'long_name': 'particle grid points in the x direction', 'units': 'm'}),
                     'y0': (('y0'), np.reshape(y0, shape[1:])[:,0],
-                           {'long_name': 'particle grid points in the y direction', 'units': 'meters'}),
+                           {'long_name': 'particle grid points in the y direction', 'units': 'm'}),
                     'time': (('time'), [np.timedelta64(int(m.t),'s').astype('timedelta64[D]')],
                              {'long_name': 'model time'})
                 },
@@ -128,8 +128,10 @@ def ensemble_generator(ds_initial, n):
             ds_particles['n'].attrs = {'long_name': 'ensemble member'}
             
             # Save as Zarr
-            fn = '/burg/abernathey/users/hillary/lcs/pyqg_ensemble/'+'%03d'%int(n)+'.zarr' 
+            fn = '/burg/abernathey/users/hillary/lcs/pyqg_ensemble/'+'%04d'%int(n)+'.zarr' 
+            ds_particles = ds_particles.astype('f4')
             ds_particles = ds_particles.chunk() #this uses a global chunk
+            
             if m.t == Tsave:
                 ds_particles.to_zarr(fn, mode='w', consolidated=True)
             else:

@@ -25,6 +25,7 @@ for snapshot in m.run_with_snapshots(tsnapstart=m.t, tsnapint=m.dt):
     
     if (m.t % Tsave)==0:
         model = m.to_dataset()
+        model = model.astype('f4')
         model = model.chunk() #this uses a global chunk
 
         if m.t == Tsave:
