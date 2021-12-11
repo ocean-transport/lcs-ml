@@ -105,7 +105,7 @@ def ensemble_generator(ds_initial, n):
                          {'long_name': 'particle relative vorticity', 'units': 's^-1'}),
                 'strain': (('time', 'y0', 'x0'), np.reshape(particle_strain, shape),
                            {'long_name': 'particle strain magnitude', 'units': 's^-1'}),
-                'p': (('time', 'y', 'x'), np.reshape(p[0], (1, config['nx'], config['nx'])),
+                'psi': (('time', 'y', 'x'), np.reshape(p[0], (1, config['nx'], config['nx'])),
                       {'long_name': 'streamfunction in real space', 'units': 'm^2 s^-1',}),
             },
                 coords = {
